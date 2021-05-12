@@ -1,0 +1,107 @@
+		title 	"flasher"
+
+		list 	p=16f84a
+
+		radix 	hex
+
+		include "p16f84a.inc"
+
+	
+
+		COUNT1 	EQU d'12'
+
+		COUNT2 	EQU d'13'
+
+		COUNT3 	EQU d'14'
+
+
+
+		ORG 	0x00
+
+		BSF 	STATUS,RP0 ;Switch to bank 1
+
+		BCF 	TRISA,d'0' ;setting ra0 as output
+
+		BCF 	TRISA,d'1' ; setting ra1 as output
+
+		BCF	TRISA,d'2' ; setting ra2 as output
+
+		BCF 	TRISA,d'3' ; setting ra3 as output
+
+		BSF 	TRISB,d'5' ;setting rb5 as input
+
+		BCF 	STATUS,RP0 ; Switch to bank 0
+
+		CLRF 	PORTA
+
+		COMF 	PORTA,F
+
+
+
+
+
+Task4	BTFSS	PORTB,d'5'
+
+		CALL	DELAY
+
+		BTFSS	PORTB,d'5'
+
+		DECF 	PORTA,F
+
+		BTFSC 	PORTB,d'5'
+
+		INCF 	PORTA,F
+
+		Call 	  Delay2
+
+		GOTO  	Task4
+
+
+
+
+
+DELAY	MOVLW 	d'250'
+
+		MOVWF 	COUNT1
+
+
+
+LOOP 	NOP
+
+		DECFSZ 	COUNT1,F
+
+		GOTO   	LOOP
+
+		RETURN
+
+
+
+Delay2 	MOVLW 	H'00'
+
+		MOVWF 	COUNT1
+
+		MOVWF 	COUNT2
+
+		MOVLW 	0x6
+
+		MOVWF 	COUNT3
+
+
+
+LOOP2 	INCFSZ 	COUNT1,F
+
+		GOTO 	LOOP2
+
+		INCFSZ 	COUNT2,F
+
+		GOTO 	LOOP2
+
+		DECFSZ 	COUNT3,F
+
+		GOTO 	LOOP2
+
+		RETURN
+
+
+
+		end
